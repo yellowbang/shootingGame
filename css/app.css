@@ -2,3 +2,11 @@ html {
     background-color: #fff;
     color: #000;
 } 
+
+.bon-surf {
+    background-color: rgba(255,255,0,0.8);
+    color: #2c2c2c;
+    border-radius: 4px;
+    box-shadow: 1px 1px 0px #a59bff;
+    text-shadow: 1px 1px #cfe2ea;
+}

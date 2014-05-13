@@ -59,6 +59,7 @@ define(function(require, exports, module) {
      *  @param {Object} options
      */
     View.prototype.setOptions = function setOptions(options) {
+        console.log(options)
         this._optionsManager.patch(options);
     };
 

@@ -73,7 +73,7 @@ define(function(require, exports, module) {
 
     PlayerSurface.prototype.playerMove = function(value){
         this.moveVector.set(_.values(value));
-        this.particle.applyImpulse(this.moveVector.div(100));
+        this.particle.applyImpulse(this.moveVector.div(300));
     };
     PlayerSurface.prototype.fireBullet = function(fire){
         this.bulletVector.set(_.values(fire));

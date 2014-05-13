@@ -11,6 +11,8 @@ define(function(require, exports, module) {
     var SizeModify = require('test/sizeModify/sizeModify');
     var PE = require('test/physicsEngine/physicsEngineTest');
     var TwoScreen = require('test/twoScreen/twoScreen');
+    var SurfacesNet = require('test/SurfacesNet/surfacesNet');
+    var Ring3D = require('test/Ring3D/Ring3D');
 
     var Game = require('app/Game');
 
@@ -22,8 +24,11 @@ define(function(require, exports, module) {
 //    var test = new Drag();
 //    var test = new SizeModify();
 //    var test = new PE();
+//    var test = new TwoScreen();
+
 //    var test = new Game();
-    var test = new TwoScreen();
+    var test = new SurfacesNet({Dimension : [9,9], ImageURL : "src/test/surfacesNet/assets/feather.jpg", ImageOriginalSize : [800, 600], ItemSpacing : 10});
+//    var test = new Ring3D();
 
     mainContext.add(test);
 
