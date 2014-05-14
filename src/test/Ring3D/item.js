@@ -14,6 +14,7 @@ define(function(require, exports, module) {
     var Rectangle = require('famous/physics/bodies/Rectangle');
     var Particle = require('famous/physics/bodies/Particle');
     var Vector = require('famous/math/Vector');
+    var RenderController = require("famous/views/RenderController");
 
     function Ring3DItem(options) {
         window.TT = Transform;
@@ -21,6 +22,10 @@ define(function(require, exports, module) {
 
         View.call(this);
         this.options = options;
+
+        this.renderController = new RenderController();
+        this.renderNode = new RenderNode();
+        this.add(this.renderController);
 
         _setupSurf.call(this);
 //        _syncEvent.call(this);
@@ -32,20 +37,34 @@ define(function(require, exports, module) {
 
     function _setupSurf(){
         this.surf = new Surface({
-            size:[100,100],
-            classes: ['bon-surf']
+            size:this.options.size,
+            classes: this.options.classes? this.options.classes:['bon-surf']
+        });
+        this.setContent(this.options.content);
+        this.surfMod = new Modifier({
+            transform: Transform.translate(-this.options.size[0]/2,-this.options.size[0]/2,0)
         });
 
         this.particle = new Rectangle({
             mass: 1,
-            position : new Vector(0,300,0),
-            velocity : new Vector(0,0,2*Math.PI/10000*300)
+            position : new Vector(this.options.initPosition),
+            velocity : new Vector(this.options.initVelocity)
         });
 
         this.options.physicsEngine.addBody(this.particle);
-        this.add(this.particle).add(this.surf);
-        setTimeout(function(){this.options.physicsEngine.removeBody(this.particle)}.bind(this),10000)
+        this.renderNode.add(this.particle).add(this.surfMod).add(this.surf);
+        this.renderController.show(this.renderNode);
+        setTimeout(function(){
+            this.options.physicsEngine.removeBody(this.particle)
+        }.bind(this),this.options.period);
+        setTimeout(function(){
+            this.renderController.hide();
+        }.bind(this),this.options.period-500)
     }
+
+    Ring3DItem.prototype.setContent = function(content){
+        this.surf.setContent(content);
+    };
 
     module.exports = Ring3DItem;
 

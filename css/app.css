@@ -10,3 +10,9 @@ html {
     box-shadow: 1px 1px 0px #a59bff;
     text-shadow: 1px 1px #cfe2ea;
 }
+
+.bon-background{
+    background-color: rgba(113, 255, 253, 0.50);
+    color: rgba(255, 89, 227, 0.80);
+    font-size: 30px;
+}

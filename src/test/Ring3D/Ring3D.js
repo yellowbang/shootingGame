@@ -1,5 +1,6 @@
 define(function(require, exports, module) {
     // import dependencies
+    var Engine = require('famous/core/Engine');
     var View = require('famous/core/View');
     var Surface = require('famous/core/Surface');
     var PhysicsEngine = require('famous/physics/PhysicsEngine');
@@ -11,40 +12,74 @@ define(function(require, exports, module) {
 
     var Constant = require('test/Ring3D/Constant');
 
-    function SurfacesNet(options) {
+    function Ring3D(options) {
 
         View.apply(this, arguments);
+        this.options.Radius = this.getDistance(this.options.Position, this.options.StringPosition);
+        this.options.Speed = 2 * Math.PI / this.options.Period * this.options.Radius;
         this.physicsEngine = new PhysicsEngine();
 
-        _setupItems.call(this);
+
+        _setupBackground.call(this);
+        _setupForce.call(this);
+        _setupEvent.call(this);
     }
 
-    SurfacesNet.prototype = Object.create(View.prototype);
-    SurfacesNet.prototype.constructor = SurfacesNet;
+    Ring3D.prototype = Object.create(View.prototype);
+    Ring3D.prototype.constructor = Ring3D;
 
-    SurfacesNet.DEFAULT_OPTIONS = {
+    Ring3D.DEFAULT_OPTIONS = {
+        Content: 'Hello',
+        Size : [100,100],
+        Period : 10000,
+        StringPosition: [window.innerWidth/2,window.innerHeight/2,0],
+        Position : [0, window.innerHeight/2, 0],
+        Velocity : [0,0,1]
+    };
+
+    function _setupBackground(){
+        this.background = new Surface({
+            content:'Please type something here',
+            classes: ['bon-background']
+        });
+        this.add(this.background);
+    }
+
+    function _setupForce(){
+        this.spring = new Spring ({
+            dampingRatio : 0.,
+            forceFunction: Spring.FORCE_FUNCTIONS.HOOK,
+            period: this.options.Period,
+            anchor: new Vector(this.options.StringPosition)
+        });
+    }
+
+    function _setupEvent(){
+        Engine.on('keyup',function(e){
+            console.log(e);
+            this.addItem({content: e.keyCode})
+        }.bind(this))
+    }
+
+    Ring3D.prototype.addItem = function(model){
+        var item = new Ring3DItem({
+            physicsEngine: this.physicsEngine,
+            content: model.content || this.options.Content,
+            size: this.options.Size,
+            initPosition: new Vector(this.options.Position),
+            initVelocity: new Vector(this.options.Velocity).mult(this.options.Speed),
+            period: this.options.Period
+        });
+        this.physicsEngine.attach(this.spring, item.particle);
+        this.add(item);
+    };
+
+    Ring3D.prototype.getDistance = function(pos1, pos2){
+        return Math.sqrt(Math.pow((pos1[0] - pos2[0]),2)+ Math.pow((pos1[1] - pos2[1]),2));
 
     };
 
-    function _setupItems(){
-        var item = new Ring3DItem({physicsEngine: this.physicsEngine});
-        var spring = new Spring ({
-            dampingRatio : 0.,
-            forceFunction: Spring.FORCE_FUNCTIONS.HOOK,
-            period: 10000,
-            anchor: new Vector(300,300,0)
-        });
-        var gravity = new VectorField({
-            field: VectorField.FIELDS.POINT_ATTRACTOR,
-            strength: 2 ,
-            position: new Vector(300,300,0)
-        });
-
-        this.physicsEngine.attach(gravity, item.particle);
-        this.add(item);
-    }
-
-    module.exports = SurfacesNet;
+    module.exports = Ring3D;
 
 
 });
