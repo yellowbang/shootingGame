@@ -2,11 +2,13 @@ define(function(require, exports, module) {
     var Transform           = require('famous/core/Transform');
     var View                = require('famous/core/View');
     var Surface             = require('famous/core/Surface');
-    var Modifier             = require('famous/core/Modifier');
+    var Modifier            = require('famous/core/Modifier');
     var EventHandler        = require('famous/core/EventHandler');
     var GenericSync         = require('famous/inputs/GenericSync');
     var TouchSync           = require('famous/inputs/TouchSync');
     var Transitionable      = require('famous/transitions/Transitionable');
+
+    var PlayerSettingView   = require('app/views/PlayerViewSetting');
 
     function PlayerView(options) {
 
@@ -16,8 +18,10 @@ define(function(require, exports, module) {
         this.model = options.model;
 
         _setupController.call(this);
+        _setupSettingView.call(this);
         _setupDirectionEvent.call(this);
         _setupGunEvent.call(this);
+        _setupModelEvent.call(this);
     }
 
     PlayerView.prototype = Object.create(View.prototype);
@@ -48,45 +52,67 @@ define(function(require, exports, module) {
         this._add(this.gunControllerMod).add(this.gunController);
     };
 
-    var _setupDirectionEvent = function(){
-        this.directionPos = new Transitionable([0,0]);
-        this.directionSync = new GenericSync(function(){
-            return this.directionPos.get();
-        }.bind(this), {syncClasses:[TouchSync]});
+    var _setupSettingView = function(){
+        var settingView = new PlayerSettingView({model:this.model});
+        this.add(settingView);
+    };
 
-        this.directionController.pipe(this.directionSync);
-        this.directionSync.on('start', function() {
-            this.directionPos.set([0,0]);
-        }.bind(this));
-        this.directionSync.on('update', function(data) {
-            this.directionPos.set(data.position);
-        }.bind(this));
-        this.directionSync.on('end', function(data) {
-            this.directionPos.set(data.position);
-            if (!this.directionPos.get()) this.directionPos.set([0,0]);
-            this.model.set('move', {x:this.directionPos.get()[0],y:this.directionPos.get()[1], z:0});
-        }.bind(this));
+    var _setupDirectionEvent = function(){
+        this.setControllerSync('direction', 'move');
     };
 
     var _setupGunEvent = function(){
-        this.gunPos = new Transitionable([0,0]);
-        this.gunSync = new GenericSync(function(){
-            return this.gunPos.get();
+        this.setControllerSync('gun','bullet');
+    };
+
+    var _setupModelEvent = function(){
+        this.model.on('all', function(e,model,value){
+            switch (e){
+                case 'change:health':
+                    if (value == 0) {
+                        this.playerDie();
+                    } else if (value == 3){
+                        this.playerRevive();
+                    }
+                    break;
+            }
+        }.bind(this));
+    };
+
+    PlayerView.prototype.setControllerSync = function(name, key){
+        this[name+'Pos'] = new Transitionable([0,0]);
+        this[name+'Sync'] = new GenericSync(function(){
+            return this[name+'Pos'].get();
         }.bind(this), {syncClasses:[TouchSync]});
 
+        this[name+'Controller'].pipe(this[name+'Sync']);
+
+        this[name+'Sync'].on('start', function() {
+            this[name+'Pos'].set([0,0]);
+            this[name+'timeStart'] = Date.now();
+        }.bind(this));
+
+        this[name+'Sync'].on('update', function(data) {
+            this[name+'Pos'].set(data.position);
+        }.bind(this));
+
+        this[name+'Sync'].on('end', function(data) {
+            this[name+'Pos'].set(data.position);
+            if (!this[name+'Pos'].get()) this[name+'Pos'].set([0,0]);
+            this[name+'timeEnd'] = Date.now();
+            this[name+'duration'] = (this[name+'timeEnd'] - this[name+'timeStart']) / 30;
+            this.model.set(key, {x:this[name+'Pos'].get()[0]/this[name+'duration'],y:this[name+'Pos'].get()[1]/this[name+'duration'], z:0});
+        }.bind(this));
+    };
+
+    PlayerView.prototype.playerRevive = function(){
+        this.directionController.pipe(this.directionSync);
         this.gunController.pipe(this.gunSync);
-        this.gunSync.on('start', function() {
-            this.gunPos.set([0,0]);
-        }.bind(this));
-        this.gunSync.on('update', function(data) {
-            this.gunPos.set(data.position);
-            console.log(data.position, data.delta);
-        }.bind(this));
-        this.gunSync.on('end', function(data) {
-            this.gunPos.set(data.position);
-            if (!this.gunPos.get()) this.gunPos.set([0,0]);
-            this.model.set('bullet', {x:this.gunPos.get()[0],y:this.gunPos.get()[1], z:0});
-        }.bind(this));
+    };
+
+    PlayerView.prototype.playerDie = function(){
+        this.directionController.unpipe(this.directionSync);
+        this.gunController.unpipe(this.gunSync);
     };
 
     module.exports = PlayerView;

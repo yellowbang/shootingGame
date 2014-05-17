@@ -27,9 +27,15 @@ define(function(require, exports, module) {
         this.surf.pipe(this.drag.sync);
 
         this.drag.eventOutput.pipe(this._eventOutput);
-        this._eventOutput.on('end', function(a){console.log('end', a)})
+//        this._eventOutput.on('end', function(a){console.log('end', a)})
 
         this._add(this.drag).add(this.surf);
+
+        this.surf2 = new Surface({
+            size:[100,100],
+            classes:['bon-surf']
+        });
+        this._add(new Modifier({origin:[0.5,0.5]})).add(this.surf2);
 
     }
 

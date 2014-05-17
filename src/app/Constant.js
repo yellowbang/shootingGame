@@ -9,6 +9,7 @@ define(function(require, exports, module) {
 
         playerDiameter : 50,
         bulletDiameter : 10,
+        bulletSpeed : 0.5,
         health:['grey','red', 'yellow', 'green'],
         wallRestitution : 1,
         collisionRestitution : 0.95,

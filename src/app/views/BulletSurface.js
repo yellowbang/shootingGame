@@ -64,7 +64,7 @@ define(function(require, exports, module) {
         var otherBodies = _.filter(this.physicsEngine.getBodies(),function(body,index){return index != _.indexOf(this.physicsEngine.getBodies(),this.player)}.bind(this));
         if (otherBodies.length==0) return;
         for (var ii in otherBodies){
-            this.physicsEngine.attach(this.collision, otherBodies[ii], this.particle)
+            this.physicsEngine.attach(this.collision, otherBodies[ii], this.particle);
         }
 //        this.physicsEngine.attach(this.collision, otherBodies, this.particle)
 
@@ -79,7 +79,7 @@ define(function(require, exports, module) {
         var bulletIndex = _.indexOf(this.physicsEngine.getParticles(),event.source);
         if (bulletIndex != -1) {
             this.physicsEngine.removeBody(this.physicsEngine.getParticles()[bulletIndex]);
-            this.bullet.setProperties({display:"none"})   // TODO:Important need to remove it from dom tree
+            this.bullet.setProperties({display:"none"});   // TODO:Important need to remove it from dom tree
         }
         if (playerIndex != -1) {
            this.physicsEngine._bodies[playerIndex].model.set('health',Math.max(this.physicsEngine._bodies[playerIndex].model.get('health')-1,0))

@@ -89,16 +89,14 @@ define(function(require, exports, module) {
         this.receiveSync.on('start', function(data) {
             this.pos.set([data.clientX, data.clientY]);
         }.bind(this));
-
         this.checkVelocity = 0;
         this.receiveSync.on('update', function(data) {
             this.pos.set(data.position);
             this.checkVelocity++;
             if (this.checkVelocity == 10){
-                this.eventIndex = this.matchVelocity(data.velocity);
-            } else {
-                if (this.eventIndex > -1) {
-                    var temp = _.clone(this.eventsCollection.models[this.eventIndex]);
+                var temp = _.clone(this.eventsCollection.models[this.matchVelocity(data.velocity)]);
+                console.log(temp);
+                if (temp){
                     var theColor = temp.get('color');
                     this.thumbnailSurf.setProperties({backgroundColor: theColor});
                 }
@@ -120,7 +118,6 @@ define(function(require, exports, module) {
         console.log(v)
         var matchIndex = -1;
         var theDifferences = [];
-        this.leftSurf.setContent('dsfsdfdsfsf')
         this.eventsCollection.each(function(model){
             // calculate the angle in degree
 

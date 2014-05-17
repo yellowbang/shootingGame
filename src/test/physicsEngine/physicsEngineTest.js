@@ -12,6 +12,8 @@ define(function(require, exports, module) {
     var Circle = require('famous/physics/bodies/Circle');
     var Drag = require('famous/physics/forces/Drag');
     var Spring = require('famous/physics/forces/Spring');
+    var Field = require ('famous/physics/forces/VectorField');
+    var Vector = require('famous/math/Vector');
 
     function PhysicsEngineTest() {
         window.TT = Transform;
@@ -25,10 +27,16 @@ define(function(require, exports, module) {
                 borderRadius: 50 + 'px'
             }
         });
-        this.particle = new Circle({radius:50,velocity : [1,1,0]});
+        this.particle = new Circle({radius:50,velocity : [0,0,0]});
+
+        this.field = new Field({
+            direction: new Vector(1,0,0)
+//            field: new Vector([1,0,0])
+        });
 
         this.physicsEngine = new PhysicsEngine();
         this.physicsEngine.addBody(this.particle);
+        this.physicsEngine.attach(this.field,this.particle);
         this._add(this.particle).add(this.surf);
     }
 

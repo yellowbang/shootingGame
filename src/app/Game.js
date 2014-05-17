@@ -40,7 +40,8 @@ define(function(require, exports, module) {
                 this.player = this.playerCollection.where({id: userId})[0];
                 if (!this.player) {
                     this.playerCollection.create({
-                        id: userId
+                        id: userId,
+                        name: localStorage.getItem('playerName')
                     });
                     this.player = this.playerCollection.where({id: userId})[0];
                 }
@@ -53,8 +54,8 @@ define(function(require, exports, module) {
                 "sync": loadPlayer.call(this)
             });
 
-//            this.playerRef = new Firebase(FirebaseURL + '/' + userId);
-//            this.playerRef.onDisconnect().remove();
+            this.playerRef = new Firebase(FirebaseURL + '/' + userId);
+            this.playerRef.onDisconnect().remove();
 
         } else {
             this.view = new MainView({collection: this.playerCollection});

@@ -1,8 +1,10 @@
 define(function(require, exports, module) {
 
     var Surface = require("famous/core/Surface");
+    var RenderNode = require("famous/core/RenderNode");
     var Modifier = require("famous/core/Modifier");
     var Transform = require("famous/core/Transform");
+    var RenderController = require('famous/views/RenderController');
     var Circle = require('famous/physics/bodies/Circle');
     var Vector = require('famous/math/Vector');
 
@@ -15,6 +17,10 @@ define(function(require, exports, module) {
         window.ff=this;
 
         this.context = context;
+        this.renderController = new RenderController();
+        this.context.add(this.renderController)
+        this.renderNode = new RenderNode();
+        this.renderController.show(this.renderNode);
         this.physicsEngine = physicsEngine;
         this.walls = walls;
         this.model = options.model;
@@ -67,6 +73,12 @@ define(function(require, exports, module) {
                 case 'change:health':
                     this.playerOnHit(value);
                     break;
+                case 'change:name':
+                    this.setAvatar();
+                    break;
+                case 'remove':
+                    this.playerDie();
+                    break;
             }
         }.bind(this));
     }
@@ -77,7 +89,7 @@ define(function(require, exports, module) {
     };
     PlayerSurface.prototype.fireBullet = function(fire){
         this.bulletVector.set(_.values(fire));
-        new BulletSurface(this.particle, this.context,this.physicsEngine, new Vector(this.particle.getPosition()),this.bulletVector.normalize(1));
+        new BulletSurface(this.particle, this.context,this.physicsEngine, new Vector(this.particle.getPosition()),this.bulletVector.normalize(AppConstant.bulletSpeed));
     };
     PlayerSurface.prototype.playerOnHit = function(health){
         if (health>0){
@@ -89,6 +101,13 @@ define(function(require, exports, module) {
     };
     PlayerSurface.prototype.playerDie = function(){
         this.physicsEngine.removeBody(this.particle);
+        this.renderController.hide();
+    };
+    PlayerSurface.prototype.setAvatar = function(){
+        var name = (this.model.get('name') != 'unknown')? this.model.get('name'):'';
+        this.player.setContent(['<div class="player-avatar">',
+            name,
+            '</div>'].join(''));
     };
 
     module.exports = PlayerSurface;

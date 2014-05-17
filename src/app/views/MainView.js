@@ -1,5 +1,6 @@
 define(function(require, exports, module) {
     var View = require('famous/core/View');
+    var Engine = require('famous/core/Engine');
     var Surface = require('famous/core/Surface');
     var PhysicsEngine = require("famous/physics/PhysicsEngine");
     var Drag = require("famous/physics/forces/Drag");     //spring effect
@@ -78,6 +79,10 @@ define(function(require, exports, module) {
                     break;
             }
         }.bind(this));
+        Engine.on('keypress',function(e){
+            console.log(e)
+            if (e.keyCode == 32) this.restartGame();
+        }.bind(this));
     }
 
     MainView.prototype.applyForces = function(){
@@ -100,8 +105,13 @@ define(function(require, exports, module) {
         this.applyForces();
     };
 
+    MainView.prototype.restartGame = function(){
+        window.location.reload();
+        this.collection.each(function(i){i.set('health', 3)});
+    };
 
 
-    module.exports = MainView;
+
+        module.exports = MainView;
 
 });

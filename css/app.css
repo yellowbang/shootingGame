@@ -1,7 +1,7 @@
 html {
     background-color: #fff;
     color: #000;
-} 
+}
 
 .bon-surf {
     background-color: rgba(255,255,0,0.8);
@@ -9,6 +9,7 @@ html {
     border-radius: 4px;
     box-shadow: 1px 1px 0px #a59bff;
     text-shadow: 1px 1px #cfe2ea;
+    -webkit-backface-visibility: visible !important;
 }
 
 .bon-background{
@@ -16,3 +17,4 @@ html {
     color: rgba(255, 89, 227, 0.80);
     font-size: 30px;
 }
+
