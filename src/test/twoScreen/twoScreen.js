@@ -26,6 +26,7 @@ define(function(require, exports, module) {
         View.call(this);
 
         _setupCollection.call(this);
+        _setupCollectionEvent.call(this);
         _setupReceiveSurf.call(this);
 
     }
@@ -52,6 +53,19 @@ define(function(require, exports, module) {
         }.bind(this));
 
 
+    }
+
+    function _setupCollectionEvent(){
+        this.eventsCollection.on('all',function(e,model,value){
+            switch (e){
+                case 'add':
+                    if (!this.cardSet && this.velocity) {
+                        this.getBestMatch(this.matchVelocity(this.velocity));
+                        this.updateThumbnailSurf();
+                    }
+                    break;
+            }
+        }.bind(this))
     }
 
     function _addASurf(model){
@@ -87,6 +101,7 @@ define(function(require, exports, module) {
         this.leftSurf.pipe(this.receiveSync);
 
         this.receiveSync.on('start', function(data) {
+            this.cardSet = false;
             this.pos.set([data.clientX, data.clientY]);
         }.bind(this));
         this.checkVelocity = 0;
@@ -94,28 +109,26 @@ define(function(require, exports, module) {
             this.pos.set(data.position);
             this.checkVelocity++;
             if (this.checkVelocity == 10){
-                var temp = _.clone(this.eventsCollection.models[this.matchVelocity(data.velocity)]);
-                console.log(temp);
-                if (temp){
-                    var theColor = temp.get('color');
-                    this.thumbnailSurf.setProperties({backgroundColor: theColor});
-                }
-                this.thumbnailSurfMod.setOpacity(1);
-                this.thumbnailSurfMod.setTransform(Transform.translate(this.pos.get()[0]-ThumbnailSize/2,this.pos.get()[1]-ThumbnailSize/2,0));
+                this.velocity = data.velocity;
+                this.bestMatchModel = this.getBestMatch(this.matchVelocity(data.velocity));
+                if (this.bestMatchModel){
 
+                    this.updateThumbnailSurf();
+                }
             }
+            this.thumbnailSurfMod.setOpacity(1);
+            this.thumbnailSurfMod.setTransform(Transform.translate(this.pos.get()[0]-ThumbnailSize/2,this.pos.get()[1]-ThumbnailSize/2,0));
         }.bind(this));
 
-        this.receiveSync.on('end', function(data) {
+        this.receiveSync.on('end', function() {
             this.checkVelocity = 0;
             this.thumbnailSurfMod.setTransform(Transform.translate(this.pos.get()[0]-ThumbnailSize/2,window.innerHeight, 0),{duration:1000});
-            setTimeout(function(){this.thumbnailSurf.setProperties({backgroundColor:'orange'})}.bind(this),1000);
+            setTimeout(function(){this.thumbnailSurf.setProperties({backgroundColor:'orange'})}.bind(this),1100);
 //            setTimeout(function(){this.thumbnailSurfMod.setOpacity(0)}.bind(this),1000);
         }.bind(this));
     }
 
     TwoScreen.prototype.matchVelocity = function(v){
-        console.log(v)
         var matchIndex = -1;
         var theDifferences = [];
         this.eventsCollection.each(function(model){
@@ -124,12 +137,21 @@ define(function(require, exports, module) {
             var angle = Math.atan(model.get('velocity')[1]/model.get('velocity')[0])/Math.PI*180;
             var theAngle = Math.atan(v[1]/v[0])/Math.PI*180;
             theDifferences.push(Math.abs(angle - theAngle)|| 999);
-            this.leftSurf.setContent([angle, '    ',theAngle, '   '].join());
             if (theDifferences.length == 1 || _.union(theDifferences).length != 1) {
-                matchIndex = 1 + theDifferences.indexOf(_.min(theDifferences));
+                matchIndex = theDifferences.indexOf(_.min(theDifferences));
             }
         }.bind(this));
         return matchIndex;
+    };
+
+    TwoScreen.prototype.getBestMatch = function(index){
+        this.bestMatchModel = _.clone(this.eventsCollection.models[index])
+    };
+
+    TwoScreen.prototype.updateThumbnailSurf = function(){
+        this.cardSet = true;
+        var theColor = this.bestMatchModel.get('color');
+        this.thumbnailSurf.setProperties({backgroundColor: theColor});
     };
 
     TwoScreen.prototype.defaultCollection = function(){

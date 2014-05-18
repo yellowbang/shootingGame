@@ -77,17 +77,22 @@ define(function(require, exports, module) {
         this.sync.on('update', function(data) {
             this.pos.set(data.position);
             this.thumbnailMod.setTransform(Transform.translate(this.pos.get()[0]-ThumbnailSize/2,this.pos.get()[1]-ThumbnailSize/2,10));
+            this.setOutPos(data);
         }.bind(this));
+
+        this.setOutPos = _.debounce(function(data){
+            console.log('debounce')
+            this.eventModel = this.eventCollection.create({
+                velocity: data.velocity,
+                color: 'light'+this.model.color
+            });
+        }.bind(this), 300);
 
         this.sync.on('end', function(data) {
             this.thumbnailMod.setTransform(Transform.translate(window.innerWidth,window.innerHeight, 0));
             this.thumbnailMod.setOpacity(0);
-            var eventModel = this.eventCollection.create({
-                velocity: data.velocity,
-                color: 'light'+this.model.color
-            });
             this.surf.setContent(['<div>',data.velocity[0],'</div>','<div>',data.velocity[1],'</div>'].join(''));
-            setTimeout(function(){this.eventCollection.remove(eventModel)}.bind(this),3000);
+            setTimeout(function(){this.eventCollection.remove(this.eventModel)}.bind(this),2000);
         }.bind(this));
     }
 
