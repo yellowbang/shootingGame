@@ -13,6 +13,7 @@ define(function(require, exports, module) {
     function SurfacesNet(options) {
 
         View.apply(this, arguments);
+        window.net = this
 
         this.physicsEngine = new PhysicsEngine();
 

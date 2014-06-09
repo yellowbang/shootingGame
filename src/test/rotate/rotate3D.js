@@ -13,13 +13,14 @@ define(function(require, exports, module) {
     var RotateRight = require('test/rotate/rotateRight');
     var RotateLeft = require('test/rotate/rotateLeft');
 
-    var Size = 100;
+    var Size = window.innerWidth;
 
     function Rotate() {
         window.TT = Transform;
         window.r = this;
         View.call(this);
 
+        this.bigNode = new RenderNode();
 
         this.surf = new Surface({
             classes:['bon-surf'],
@@ -30,22 +31,30 @@ define(function(require, exports, module) {
         });
 
         this.translateMod1 = new Modifier({
-            transform: Transform.translate(0,0,Size*Math.sqrt(3)/3)
+            transform: Transform.translate(0,0,Size/2)
         });
         this.originMod = new Modifier({
-//            origin: [0.5,0.5]
+//            origin: [1.0,0.5,0.5]
         });
         this.rotateMod = new Modifier({
-//            origin:[1,0]
+            origin:[0.5,0],
+            transform:Transform.rotateY(Math.PI/2)
         });
         this.translateMod2 = new Modifier({
-            transform: Transform.translate(window.innerWidth/2,0,-Size*Math.sqrt(3)/3)
+            transform: Transform.translate(0,0,-Size/2)
         });
 
-        this.rotateMod.setTransform(Transform.rotateY(Math.PI), {duration:5000});
+//        this.rotateMod.setTransform(Transform.rotateY(Math.PI/2), {duration:2000});
 //        this.rotateMod.setTransform(Transform.rotateY(0), {duration:5000});
 
-        this.add(this.translateMod2).add(this.rotateMod).add(this.originMod).add(this.translateMod1).add(this.surf);
+        this.matrixx = Transform.thenMove(Transform.moveThen([0,0,Size/2],Transform.rotateY(1*Math.PI/2)),[0,0,-Size/2]);
+
+        this.finalMod = new Modifier({
+            transform: this.matrixx
+        });
+
+//        this.add(this.translateMod2).add(this.rotateMod).add(this.translateMod1).add(this.surf);
+        this.add(this.finalMod).add(this.surf);
 
     }
 

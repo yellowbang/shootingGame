@@ -11,6 +11,8 @@ define(function(require, exports, module) {
     var Easing = require('famous/transitions/Easing');
     var Transitionable = require('famous/transitions/Transitionable');
 
+    var DragView = require('test/drag/dragView');
+
     function Drag() {
         window.TT = Transform;
         window.PE = this;
@@ -19,8 +21,15 @@ define(function(require, exports, module) {
         this.surf = new Surface({
             size:[100,100],
             properties:{
-                backgroundColor:'yellow'
+                backgroundColor:'blue'
             }
+        });
+        this.surfNode = new Modifier({
+            transform:Transform.translate(0,0,3)
+        });
+        this.surfMod = new Modifier({
+            origin:[0.5,0.4],
+            transform:Transform.translate(0,0,0)
         });
 
         this.drag = new Dragggable();
@@ -29,15 +38,23 @@ define(function(require, exports, module) {
         this.drag.eventOutput.pipe(this._eventOutput);
 //        this._eventOutput.on('end', function(a){console.log('end', a)})
 
-        this._add(this.drag).add(this.surf);
-
+//        this.add(this.surfNode).add(this.surfMod).add(this.surf);
+        this.surf1 = new DragView();
+        this.add(this.surf1);
         this.surf2 = new Surface({
             size:[100,100],
             classes:['bon-surf']
         });
-        this._add(new Modifier({origin:[0.5,0.5]})).add(this.surf2);
+        this._add(new Modifier({origin:[0.5,0.5],transform:Transform.translate(0,0,2)})).add(this.surf2);
 
+//        this.surf.on('click',function(){
+//            alert('surf1')
+//        }.bind(this));
+        this.surf2.on('click',function(){
+            alert('surf2')
+        }.bind(this))
     }
+
 
 
     Drag.prototype = Object.create(View.prototype);

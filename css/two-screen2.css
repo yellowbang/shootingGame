@@ -1,0 +1,23 @@
+.default-circle1{
+    width: 70px;
+    height: 70px;
+    border-radius: 35px;
+    background-color: darkgray;
+}
+.default-square1{
+    width: 70px;
+    height: 70px;
+    border-radius: 3px;
+    background-color: darkred;
+}
+
+.to-do-list{
+    border: solid thin black;
+    border-radius: 5px;
+    background-color: goldenrod;
+    font-family: "PFDinDisplayPro", sans-serif;
+    font-size: 25px;
+}
+.to-do-list h3{
+    text-align: center;
+}

@@ -99,10 +99,12 @@ define(function(require, exports, module) {
             this.playerDie();
         }
     };
+
     PlayerSurface.prototype.playerDie = function(){
-        this.physicsEngine.removeBody(this.particle);
         this.renderController.hide();
+        this.physicsEngine.removeBody(this.particle);
     };
+
     PlayerSurface.prototype.setAvatar = function(){
         var name = (this.model.get('name') != 'unknown')? this.model.get('name'):'';
         this.player.setContent(['<div class="player-avatar">',

@@ -17,7 +17,7 @@ define(function(require, exports, module) {
         View.call(this);
 
         this.surf = new Surface({
-//            size:[100,100],
+            size:[100,100],
             content: 'dsfdfsdfsdfsfsdfsfsefeifjowiejfwoeifjeiwojfoiewjfoiwejifowe',
             properties:{
                 backgroundColor:'yellow',
@@ -45,6 +45,8 @@ define(function(require, exports, module) {
             this.pos.set(data.position);
             console.log(data.position)
             this.mod.setSize(this.pos.get());
+//            console.log(this.pos.get())
+//            this.mod.setTransform(Transform.scale(this.pos.get()[0]/100,this.pos.get()[1]/100,1))
         }.bind(this));
         this.sync.on('end', function(data) {
         }.bind(this));

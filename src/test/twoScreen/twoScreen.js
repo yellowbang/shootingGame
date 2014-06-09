@@ -88,7 +88,7 @@ define(function(require, exports, module) {
             }
         });
         this.thumbnailSurfMod = new Modifier({
-            opacity:1,
+            opacity:0.2,
             transform: Transform.translate(window.innerWidth,window.innerHeight,0)
         });
         this._add(this.thumbnailSurfMod).add(this.thumbnailSurf);
@@ -112,11 +112,9 @@ define(function(require, exports, module) {
                 this.velocity = data.velocity;
                 this.bestMatchModel = this.getBestMatch(this.matchVelocity(data.velocity));
                 if (this.bestMatchModel){
-
                     this.updateThumbnailSurf();
                 }
             }
-            this.thumbnailSurfMod.setOpacity(1);
             this.thumbnailSurfMod.setTransform(Transform.translate(this.pos.get()[0]-ThumbnailSize/2,this.pos.get()[1]-ThumbnailSize/2,0));
         }.bind(this));
 
@@ -124,7 +122,7 @@ define(function(require, exports, module) {
             this.checkVelocity = 0;
             this.thumbnailSurfMod.setTransform(Transform.translate(this.pos.get()[0]-ThumbnailSize/2,window.innerHeight, 0),{duration:1000});
             setTimeout(function(){this.thumbnailSurf.setProperties({backgroundColor:'orange'})}.bind(this),1100);
-//            setTimeout(function(){this.thumbnailSurfMod.setOpacity(0)}.bind(this),1000);
+            setTimeout(function(){this.thumbnailSurfMod.setOpacity(0)}.bind(this),1000);
         }.bind(this));
     }
 
@@ -150,6 +148,7 @@ define(function(require, exports, module) {
 
     TwoScreen.prototype.updateThumbnailSurf = function(){
         this.cardSet = true;
+        this.thumbnailSurfMod.setOpacity(1);
         var theColor = this.bestMatchModel.get('color');
         this.thumbnailSurf.setProperties({backgroundColor: theColor});
     };

@@ -48,7 +48,7 @@ define(function(require, exports, module) {
         this.thumbnail = new Surface({
             size:[ThumbnailSize,ThumbnailSize],
             properties:{
-                backgroundColor: 'light'+this.model.color
+                backgroundColor: this.model.color
             }
         });
         this.thumbnailMod = new Modifier({
@@ -68,6 +68,7 @@ define(function(require, exports, module) {
         this.surf.pipe(this.sync);
 
         this.sync.on('start', function(data) {
+
             this.pos.set([data.clientX,data.clientY]);
             this.thumbnailMod.setOpacity(1);
             this.thumbnailMod.setTransform(Transform.translate(this.pos.get()[0]-ThumbnailSize/2,this.pos.get()[1]-ThumbnailSize/2,10));
@@ -77,7 +78,7 @@ define(function(require, exports, module) {
         this.sync.on('update', function(data) {
             this.pos.set(data.position);
             this.thumbnailMod.setTransform(Transform.translate(this.pos.get()[0]-ThumbnailSize/2,this.pos.get()[1]-ThumbnailSize/2,10));
-            this.setOutPos(data);
+//            this.setOutPos(data);
         }.bind(this));
 
         this.setOutPos = _.debounce(function(data){
@@ -89,6 +90,7 @@ define(function(require, exports, module) {
         }.bind(this), 300);
 
         this.sync.on('end', function(data) {
+            this.setOutVelocity(data);
             this.thumbnailMod.setTransform(Transform.translate(window.innerWidth,window.innerHeight, 0));
             this.thumbnailMod.setOpacity(0);
             this.surf.setContent(['<div>',data.velocity[0],'</div>','<div>',data.velocity[1],'</div>'].join(''));
@@ -98,6 +100,13 @@ define(function(require, exports, module) {
 
     TwoScreenItem.prototype = Object.create(View.prototype);
     TwoScreenItem.prototype.constructor = TwoScreenItem;
+
+    TwoScreenItem.prototype.setOutVelocity = function(data){
+        this.eventModel = this.eventCollection.create({
+            velocity: data.velocity,
+            color: this.model.color
+        });
+    };
 
     module.exports = TwoScreenItem;
 

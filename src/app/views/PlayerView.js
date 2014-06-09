@@ -9,6 +9,9 @@ define(function(require, exports, module) {
     var Transitionable      = require('famous/transitions/Transitionable');
 
     var PlayerSettingView   = require('app/views/PlayerViewSetting');
+    GenericSync.register({
+        touch : TouchSync
+    });
 
     function PlayerView(options) {
 

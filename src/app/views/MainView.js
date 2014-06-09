@@ -3,6 +3,7 @@ define(function(require, exports, module) {
     var Engine = require('famous/core/Engine');
     var Surface = require('famous/core/Surface');
     var PhysicsEngine = require("famous/physics/PhysicsEngine");
+//    var PhysicsEngine = require('app/custom/PhysicsEngine');
     var Drag = require("famous/physics/forces/Drag");     //spring effect
     var Wall = require("famous/physics/constraints/Wall");
     var Collision = require("famous/physics/constraints/Collision");
@@ -12,6 +13,20 @@ define(function(require, exports, module) {
 
     var PlayerSurface = require('app/views/PlayerSurface');
     var AppConstant = require('app/Constant');
+
+
+    PhysicsEngine.prototype.detachFrom = function detachFrom(id, target) {
+        var boundAgent = _getBoundAgent.call(this, id);
+
+        // TODO:Bon
+        if (!boundAgent) return;
+        if (boundAgent.source === target) this.detach(id);
+        else {
+            var targets = boundAgent.targets;
+            var index = targets.indexOf(target);
+            if (index > -1) targets.splice(index,1);
+        }
+    }.bind(PhysicsEngine);
 
     function MainView(options){
         //TODO Bon
