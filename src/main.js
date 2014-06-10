@@ -19,6 +19,7 @@ define(function(require, exports, module) {
     var RenderController = require('test/RenderController/renderController');
     var SurfacesNet = require('test/SurfacesNet/surfacesNet');
     var Ring3D = require('test/Ring3D/Ring3D');
+    var JumpUpSurface = require('test/JumpUpSurface/JumpUpSurface');
 
     var Game = require('app/Game');
 
@@ -31,9 +32,9 @@ define(function(require, exports, module) {
 //    var test = new Scrollview();
 //    var test = new Drag();
 //    var test = new SizeModify();
-//    var test = new scaleModify();
+    var test = new scaleModify();
 //    var test = new PE();
-    var test = new HangingSurface({surfOneContent:'bonbonobn'});
+//    var test = new HangingSurface({surfOneContent:'bonbonobn'});
 //    var test = new TwoScreen();
 //    var test = new TwoScreen2();
 //    var test = new RenderController();

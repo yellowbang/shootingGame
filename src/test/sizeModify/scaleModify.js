@@ -14,8 +14,8 @@ define(function(require, exports, module) {
         View.call(this);
 
         this.surf = new Surface({
-            size:[100,100],
-            content: 'dsfdfsdfsdfsfsdfsfsefeifjowiejfwoeifjeiwojfoiewjfoiwejifowe',
+            size:[2000,2000],
+            content: '<div style="font-size: 140px">dsfdfsdfsdfsfsdfsfsefeifjowiejfwoeifjeiwojfoiewjfoiwejifowe</div>',
             properties:{
                 backgroundColor:'yellow',
                 color: 'black',
@@ -25,12 +25,12 @@ define(function(require, exports, module) {
 
         this.mod = new Modifier({
             origin:[0.5,0.5],
-            scale:[0.1,0.1]
+            transform: Transform.scale(0.05,0.05)
         });
 
         this.add(this.mod).add(this.surf);
         Timer.setTimeout(function(){
-            this.mod.setTransform(Transform.scale(2,2,2),{duration:200})
+            this.mod.setTransform(Transform.scale(0.1,0.1,0.1),{duration:500})
         }.bind(this),1000)
     }
 
