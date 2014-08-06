@@ -9,6 +9,7 @@ define(function(require, exports, module) {
     var Rotate3D = require('test/rotate/rotate3D');
     var Triangle = require('test/rotate/Triangle');
     var Scrollview = require('test/scrollview/scrollview');
+    var ScrollviewOutput = require('test/scrollview/scrollviewOutput');
     var Drag = require('test/drag/Drag');
     var SizeModify = require('test/sizeModify/sizeModify');
     var scaleModify = require('test/sizeModify/scaleModify');
@@ -19,7 +20,9 @@ define(function(require, exports, module) {
     var RenderController = require('test/RenderController/renderController');
     var SurfacesNet = require('test/SurfacesNet/surfacesNet');
     var Ring3D = require('test/Ring3D/Ring3D');
+    var NElementsRotator = require('test/Ring3D/NElementsRotator');
     var JumpUpSurface = require('test/JumpUpSurface/JumpUpSurface');
+    var SvgElements = require('test/svg/SvgElements');
 
     var Game = require('app/Game');
 
@@ -28,23 +31,25 @@ define(function(require, exports, module) {
     // your app here
 //    var test = new Rotate();
 //    var test = new Rotate3D();
+//    var test = new NElementsRotator();
 //    var test = new Triangle();
 //    var test = new Scrollview();
+    var test = new ScrollviewOutput();
 //    var test = new Drag();
 //    var test = new SizeModify();
-    var test = new scaleModify();
+//    var test = new scaleModify();
 //    var test = new PE();
 //    var test = new HangingSurface({surfOneContent:'bonbonobn'});
 //    var test = new TwoScreen();
 //    var test = new TwoScreen2();
 //    var test = new RenderController();
-    console.log(window.innerWidth)
+//    var test = new JumpUpSurface();
+//    var test = new SvgElements();
 
 //    var test = new Game();
 //    var test = new SurfacesNet({Dimension : [7,7], ImageURL : "src/test/surfacesNet/assets/feather.jpg", ImageOriginalSize : [800, 600], ItemSpacing : 10});
 //    var test = new Ring3D();
 
-    console.log(window.innerWidth)
     mainContext.add(test);
 
 });
