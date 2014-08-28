@@ -9,7 +9,6 @@ define(function(require, exports, module) {
     var Rotate3D = require('test/rotate/rotate3D');
     var Triangle = require('test/rotate/Triangle');
     var Scrollview = require('test/scrollview/scrollview');
-    var ScrollviewOutput = require('test/scrollview/scrollviewOutput');
     var Drag = require('test/drag/Drag');
     var SizeModify = require('test/sizeModify/sizeModify');
     var scaleModify = require('test/sizeModify/scaleModify');
@@ -34,7 +33,7 @@ define(function(require, exports, module) {
 //    var test = new NElementsRotator();
 //    var test = new Triangle();
 //    var test = new Scrollview();
-    var test = new ScrollviewOutput();
+//    var test = new ScrollviewOutput();
 //    var test = new Drag();
 //    var test = new SizeModify();
 //    var test = new scaleModify();
@@ -45,12 +44,15 @@ define(function(require, exports, module) {
 //    var test = new RenderController();
 //    var test = new JumpUpSurface();
 //    var test = new SvgElements();
+//    var test = new rotateSync();
 
 //    var test = new Game();
 //    var test = new SurfacesNet({Dimension : [7,7], ImageURL : "src/test/surfacesNet/assets/feather.jpg", ImageOriginalSize : [800, 600], ItemSpacing : 10});
 //    var test = new Ring3D();
 
-    mainContext.add(test);
+//    mainContext.add(test);
+//    var ScrollviewOutput = require('test/scrollview/scrollviewOutput');
+    var rotateSync = require('test/rotateSync/rotateSync');
 
 });
 
