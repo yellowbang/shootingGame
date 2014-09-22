@@ -18,7 +18,7 @@ define(function(require, exports, module) {
 
         this.context = context;
         this.renderController = new RenderController();
-        this.context.add(this.renderController)
+//        this.context.add(this.renderController)
         this.renderNode = new RenderNode();
         this.renderController.show(this.renderNode);
         this.physicsEngine = physicsEngine;
@@ -42,6 +42,7 @@ define(function(require, exports, module) {
                 backgroundColor: AppConstant.health[Math.max(this.model.get('health'),0)]
             }
         });
+        this.renderNode.add(this.player);
         this.playerMod = new Modifier({
             transform:Transform.translate(-this.size[0]/2,-this.size[0]/2,0)
         });
@@ -56,7 +57,7 @@ define(function(require, exports, module) {
             model: this.model
         });
         this.physicsEngine.addBody(this.particle);
-        this.context._add(this.particle).add(this.playerMod).add(this.player);
+        this.context._add(this.particle).add(this.playerMod).add(this.renderController);
     }
 
     function _syncEvent(){

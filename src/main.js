@@ -46,13 +46,13 @@ define(function(require, exports, module) {
 //    var test = new SvgElements();
 //    var test = new rotateSync();
 
-//    var test = new Game();
+    var test = new Game();
 //    var test = new SurfacesNet({Dimension : [7,7], ImageURL : "src/test/surfacesNet/assets/feather.jpg", ImageOriginalSize : [800, 600], ItemSpacing : 10});
 //    var test = new Ring3D();
 
-//    mainContext.add(test);
+    mainContext.add(test);
 //    var ScrollviewOutput = require('test/scrollview/scrollviewOutput');
-    var rotateSync = require('test/rotateSync/rotateSync');
+//    var rotateSync = require('test/rotateSync/rotateSync');
 
 });
 

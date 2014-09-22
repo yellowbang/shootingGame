@@ -100,6 +100,7 @@ define(function(require, exports, module) {
         }.bind(this));
 
         this[name+'Sync'].on('end', function(data) {
+            console.log(data);
             this[name+'Pos'].set(data.position);
             if (!this[name+'Pos'].get()) this[name+'Pos'].set([0,0]);
             this[name+'timeEnd'] = Date.now();
